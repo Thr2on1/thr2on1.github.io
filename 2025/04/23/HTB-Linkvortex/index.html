@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang=en>
+<head>
+    <!-- so meta -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5" />
+    <meta name="description" content="Nmap开启靶机先使用nmap扫描一下端口 1nmap -p- --min-rate 10000 10.10.11.47 发现开放了两个tcp端口扫一下服务信息： 1nmap -p22,80 -sV -sC -O 10.10.11.47 这里也是扫到一个网站用的是ghost cms搭建的博客网上搜索一番，发现只有后台的漏洞，所以先想办法进后台。先爆破一下目录，没有发现有用的信息，结合nmap扫描的">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTB-Linkvortex">
+<meta property="og:url" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/index.html">
+<meta property="og:site_name" content="Thr2on1&#39;s Blog">
+<meta property="og:description" content="Nmap开启靶机先使用nmap扫描一下端口 1nmap -p- --min-rate 10000 10.10.11.47 发现开放了两个tcp端口扫一下服务信息： 1nmap -p22,80 -sV -sC -O 10.10.11.47 这里也是扫到一个网站用的是ghost cms搭建的博客网上搜索一番，发现只有后台的漏洞，所以先想办法进后台。先爆破一下目录，没有发现有用的信息，结合nmap扫描的">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423184059.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423184509.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423185749.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423185923.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423190115.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423192619.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423192754.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423215254.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423215557.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423220002.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423220125.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423220255.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423220452.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423224659.png">
+<meta property="og:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250424000233.png">
+<meta property="article:published_time" content="2025-04-23T09:55:32.000Z">
+<meta property="article:modified_time" content="2026-02-15T02:38:35.163Z">
+<meta property="article:author" content="Thr2on1">
+<meta property="article:tag" content="Linux">
+<meta property="article:tag" content="CVE-2023-40028">
+<meta property="article:tag" content="TOCTOU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/Pasted%20image%2020250423184059.png">
+    
+    
+      
+        
+          <link rel="shortcut icon" href="/images/favicon.ico">
+        
+      
+      
+        
+          <link rel="icon" type="image/png" href="/images/favicon-192x192.png" sizes="192x192">
+        
+      
+      
+        
+          <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png">
+        
+      
+    
+    <!-- title -->
+    <title>HTB-Linkvortex</title>
+    <!-- async scripts -->
+    <!-- Google Analytics -->
+
+
+    <!-- Umami Analytics -->
+
+
+    <!-- styles -->
+    
+<link rel="stylesheet" href="/css/style.css">
+
+    <!-- persian styles -->
+    
+    <!-- rss -->
+    
+    
+	<!-- mathjax -->
+	
+<meta name="generator" content="Hexo 7.3.0"></head>
+
+<body class="max-width mx-auto px3 ltr">
+    
+      <div id="header-post">
+  <a id="menu-icon" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="menu-icon-tablet" href="#" aria-label="Menu"><i class="fa-solid fa-bars fa-lg"></i></a>
+  <a id="top-icon-tablet" href="#" aria-label="Top" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');" style="display:none;"><i class="fa-solid fa-chevron-up fa-lg"></i></a>
+  <span id="menu">
+    <span id="nav">
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </span>
+    <br/>
+    <span id="actions">
+      <ul>
+        
+        <li><a class="icon" aria-label="Previous post" href="/2025/05/29/Flask%E6%97%A0%E5%9B%9E%E6%98%BERCE/"><i class="fa-solid fa-chevron-left" aria-hidden="true" onmouseover="$('#i-prev').toggle();" onmouseout="$('#i-prev').toggle();"></i></a></li>
+        
+        
+        <li><a class="icon" aria-label="Back to top" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up" aria-hidden="true" onmouseover="$('#i-top').toggle();" onmouseout="$('#i-top').toggle();"></i></a></li>
+        <li><a class="icon" aria-label="Share post" href="#"><i class="fa-solid fa-share-alt" aria-hidden="true" onmouseover="$('#i-share').toggle();" onmouseout="$('#i-share').toggle();" onclick="$('#share').toggle();return false;"></i></a></li>
+      </ul>
+      <span id="i-prev" class="info" style="display:none;">Previous post</span>
+      <span id="i-next" class="info" style="display:none;">Next post</span>
+      <span id="i-top" class="info" style="display:none;">Back to top</span>
+      <span id="i-share" class="info" style="display:none;">Share post</span>
+    </span>
+    <br/>
+    <div id="share" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/"><i class="fab fa-facebook " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&text=HTB-Linkvortex"><i class="fab fa-twitter " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&title=HTB-Linkvortex"><i class="fab fa-linkedin " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&is_video=false&description=HTB-Linkvortex"><i class="fab fa-pinterest " aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Linkvortex&body=Check out this article: https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/"><i class="fa-solid fa-envelope " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&title=HTB-Linkvortex"><i class="fab fa-get-pocket " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&title=HTB-Linkvortex"><i class="fab fa-reddit " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&title=HTB-Linkvortex"><i class="fab fa-stumbleupon " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&title=HTB-Linkvortex"><i class="fab fa-digg " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&name=HTB-Linkvortex&description="><i class="fab fa-tumblr " aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&t=HTB-Linkvortex"><i class="fab fa-hacker-news " aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+    
+    
+      <div id="toc">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Subdomain"><span class="toc-number">2.</span> <span class="toc-text">Subdomain</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2023-40028"><span class="toc-number">3.</span> <span class="toc-text">CVE-2023-40028</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROOT"><span class="toc-number">4.</span> <span class="toc-text">ROOT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clean-symlink-sh%E6%8F%90%E6%9D%83"><span class="toc-number">5.</span> <span class="toc-text">clean_symlink.sh提权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-Double-Symlinks"><span class="toc-number">5.1.</span> <span class="toc-text">0x01 Double Symlinks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-TOCTOU-time-of-check-time-of-use"><span class="toc-number">5.2.</span> <span class="toc-text">0x02 TOCTOU(time of check time of use)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-CHECK-CONTENT"><span class="toc-number">5.3.</span> <span class="toc-text">0x03 $CHECK_CONTENT</span></a></li></ol></li></ol>
+      </div>
+    
+  </span>
+</div>
+
+    
+    <div class="content index py4 ">
+        
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+  <header>
+    
+    <h1 class="posttitle p-name" itemprop="name headline">
+        HTB-Linkvortex
+    </h1>
+
+
+
+    <div class="meta">
+      <span class="author p-author h-card" itemprop="author" itemscope itemtype="http://schema.org/Person">
+        <span class="p-name" itemprop="name">Thr2on1</span>
+      </span>
+      
+    <div class="postdate">
+      
+        <time datetime="2025-04-23T09:55:32.000Z" class="dt-published" itemprop="datePublished">2025-04-23</time>
+        
+      
+    </div>
+
+
+      
+    <div class="article-category">
+        <i class="fa-solid fa-archive"></i>
+        <a class="category-link" href="/categories/HackTheBox/">HackTheBox</a>
+    </div>
+
+
+      
+    <div class="article-tag">
+        <i class="fa-solid fa-tag"></i>
+        <a class="p-category" href="/tags/CVE-2023-40028/" rel="tag">CVE-2023-40028</a>, <a class="p-category" href="/tags/Linux/" rel="tag">Linux</a>, <a class="p-category" href="/tags/TOCTOU/" rel="tag">TOCTOU</a>
+    </div>
+
+
+    </div>
+  </header>
+  
+
+  <div class="content e-content" itemprop="articleBody">
+    <h2 id="Nmap"><a href="#Nmap" class="headerlink" title="Nmap"></a>Nmap</h2><p>开启靶机先使用nmap扫描一下端口</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -p- --min-rate 10000 10.10.11.47</span><br></pre></td></tr></table></figure>
+<p><img src="Pasted%20image%2020250423184059.png" alt="Pasted image 20250423184059"><br>发现开放了两个tcp端口<br>扫一下服务信息：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nmap -p22,80 -sV -sC -O 10.10.11.47</span><br></pre></td></tr></table></figure>
+<p><img src="Pasted%20image%2020250423184509.png" alt="Pasted image 20250423184509"><br>这里也是扫到一个网站用的是ghost cms搭建的博客<br>网上搜索一番，发现只有后台的漏洞，所以先想办法进后台。<br>先爆破一下目录，没有发现有用的信息，结合nmap扫描的结果，有个&#x2F;ghost&#x2F;目录，是默认的后台路径。</p>
+<h2 id="Subdomain"><a href="#Subdomain" class="headerlink" title="Subdomain"></a>Subdomain</h2><p>这里再爆破一下子域名</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ffuf -u http://10.10.11.47 -H &quot;Host: FUZZ.linkvortex.htb&quot; -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-20000.txt -ac</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>u 指定url</p>
+</li>
+<li><p>H 自定义HTTP Header</p>
+</li>
+<li><p>w 指定字典</p>
+</li>
+<li><p>ac 自动校准模式：通过智能识别目标应用的正常响应行为，自动排除与正常响应类似的“无效”结果，从而提高扫描结果的准确性。<br><img src="Pasted%20image%2020250423185749.png" alt="Pasted image 20250423185749"><br>爆破结束，发现一个dev的子域名。<br>将10.10.11.47    dev.linkvortex.htb加入到hosts文件中<br>用dirsearch扫描一下路径。<br><img src="Pasted%20image%2020250423185923.png" alt="Pasted image 20250423185923"></p>
+</li>
+</ul>
+<h2 id="CVE-2023-40028"><a href="#CVE-2023-40028" class="headerlink" title="CVE-2023-40028"></a>CVE-2023-40028</h2><p>这里扫到有git泄露，用git_dumper脚本跑一下。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 git_dumper.py http://dev.linkvortex.htb/.git repo</span><br></pre></td></tr></table></figure>
+<p><img src="Pasted%20image%2020250423190115.png" alt="Pasted image 20250423190115"><br>爬到关键源码。<br><code>git status</code>查看一下git仓库的状态：<br>使用<code>git status</code>我们可以看到添加和修改文件的状态。<br><img src="Pasted%20image%2020250423192619.png" alt="Pasted image 20250423192619"><br>可以看到新创建了一个Dockerfile.ghost，里面可能保存了一些配置信息。<br><img src="Pasted%20image%2020250423192754.png" alt="Pasted image 20250423192754"><br>这里可以看到拷贝了一份config文件到&#x2F;var&#x2F;lib&#x2F;ghost&#x2F;config.production.json<br>我们使用<code>git diff --cached</code>查看暂存区与最后一次提交之间的差异。<br><img src="Pasted%20image%2020250423215254.png" alt="Pasted image 20250423215254"><br>看到这里有一个酷似密码的字符串，我们尝试登陆一下。<br>我们使用 <code>admin@linkvortex.htb\OctopiFociPilfer45</code>登陆到了后台<br>在网上搜索一下ghost的漏洞。<br><img src="Pasted%20image%2020250423215557.png" alt="Pasted image 20250423215557"><br>发现有一个任意文件读取的漏洞，结合还开放了22端口，我们需要找到一个合适的用户登陆进去。<br>下载POC，先尝试读取一下&#x2F;etc&#x2F;passwd<br><img src="Pasted%20image%2020250423220002.png" alt="Pasted image 20250423220002"><br>这里有个node用户，但是我尝试了很多方法都没有登陆上去，之前还有一个config文件，也尝试读取一下<br><img src="Pasted%20image%2020250423220125.png" alt="Pasted image 20250423220125"><br>这里读取到一个用户和密码，尝试登陆一下。<br><img src="Pasted%20image%2020250423220255.png" alt="Pasted image 20250423220255"><br>成功登陆</p>
+<h2 id="ROOT"><a href="#ROOT" class="headerlink" title="ROOT"></a>ROOT</h2><p>先<code>sudo -l</code>查看一下配置信息<br><img src="Pasted%20image%2020250423220452.png" alt="Pasted image 20250423220452"><br>![Pasted image 20250423220604](Pasted image 20250423220604.png)<br>&#x2F;etc&#x2F;sudoers 允许我们以root权限执行该命令，查看一下&#x2F;opt&#x2F;ghost&#x2F;clean_symlink.sh的逻辑：<br><img src="Pasted%20image%2020250423224659.png" alt="Pasted image 20250423224659"><br>我们可以利用这个脚本来实现提权。</p>
+<h2 id="clean-symlink-sh提权"><a href="#clean-symlink-sh提权" class="headerlink" title="clean_symlink.sh提权"></a>clean_symlink.sh提权</h2><h3 id="0x01-Double-Symlinks"><a href="#0x01-Double-Symlinks" class="headerlink" title="0x01 Double Symlinks"></a>0x01 Double Symlinks</h3><p>Double Symlinks顾名思义就是嵌套两层符号连接<br>a.png -&gt; b -&gt; &#x2F;root&#x2F;root.txt(理论上来说可以是任何文件)</p>
+<p>在利用这个漏洞之前，我们先来了解一下Linux 下符号连接的追踪问题：<br>当系统打开了Protected Symlinks模式，则会对符号连接的访问产生一些限制：<br>使用命令<code>sysctl fs.protected_symlinks</code>来检查是否开启，Ubuntu默认是开启的。<br>只有满足以下条件之一时，符号链接才能被正常跟随（即访问其指向的目标文件）</p>
+<ol>
+<li>符号链接位于非[<strong>粘滞 + 全局可写</strong>]的目录外<br>  全局可写，顾名思义所有用户都可以写入文件，例如&#x2F;tmp目录等。、<br>  粘滞，目录的sticky位(t)表示这个目录里的文件只能被owner和root删除，例如：<img src="Pasted%20image%2020250424000233.png" alt="Pasted image 20250424000233"></li>
+<li>符号链接的拥有者与访问者 UID 相同</li>
+<li>符号链接所在目录的所有者与符号链接的拥有者相同<br>这里我们直接在bob用户根目录下创建一个软链接b指向&#x2F;root&#x2F;root.txt<br>然后创建一个a.png指向&#x2F;home&#x2F;bob&#x2F;b(一定要用绝对路径)<br>然后调用脚本即可。</li>
+</ol>
+<h3 id="0x02-TOCTOU-time-of-check-time-of-use"><a href="#0x02-TOCTOU-time-of-check-time-of-use" class="headerlink" title="0x02 TOCTOU(time of check time of use)"></a>0x02 TOCTOU(time of check time of use)</h3><p>这是一个条件竞争漏洞。<br>当一个程序在读取一个文件(执行一项功能时)，往往会先对文件的权限或者类型进行检查(check)，在检查完后，如果合格就会进入下一步(读取文件内容或者执行命令等)，如果我们在check后，use之前将目标文件替换了，那么最后读取文件的内容就是我们希望获取的内容。</p>
+<p>在这道题目中，它会先检查一个符号链接是否指向&#x2F;root，&#x2F;etc等敏感目录，我们先创建一个普通的链接文件use.png，当检查通过后，会将use.png放入隔离区&#x2F;var&#x2F;quarantined目录下，如果CHECK_CONTENT&#x3D;true的话还会读取文件内容，我们可以利用将use.png放入隔离区与进行文件读取之前，让隔离区中的use.png指向&#x2F;root&#x2F;root.txt，这样就可以成功读取文件(当然也可以读取root用户的ssh_rsa)</p>
+<h3 id="0x03-CHECK-CONTENT"><a href="#0x03-CHECK-CONTENT" class="headerlink" title="0x03 $CHECK_CONTENT"></a>0x03 $CHECK_CONTENT</h3><p>由于脚本中有 if $CHECK_CONTENT; 进行判断，因此我们可以直接设置CHECK_CONTENT变量为我们希望执行的命令。</p>
+
+  </div>
+</article>
+
+
+
+        
+          <div id="footer-post-container">
+  <div id="footer-post">
+
+    <div id="nav-footer" style="display: none">
+      <ul>
+        
+          <li><a href="/">Home</a></li>
+        
+          <li><a href="/archives/">Writing</a></li>
+        
+          <li><a href="/categories/">Category</a></li>
+        
+          <li><a href="/tags/">tags</a></li>
+        
+          <li><a href="/about/">About</a></li>
+        
+          <li><a href="/search/">Search</a></li>
+        
+      </ul>
+    </div>
+
+    
+    
+      <div id="toc-footer" style="display: none">
+        <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Nmap"><span class="toc-number">1.</span> <span class="toc-text">Nmap</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Subdomain"><span class="toc-number">2.</span> <span class="toc-text">Subdomain</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#CVE-2023-40028"><span class="toc-number">3.</span> <span class="toc-text">CVE-2023-40028</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROOT"><span class="toc-number">4.</span> <span class="toc-text">ROOT</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#clean-symlink-sh%E6%8F%90%E6%9D%83"><span class="toc-number">5.</span> <span class="toc-text">clean_symlink.sh提权</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#0x01-Double-Symlinks"><span class="toc-number">5.1.</span> <span class="toc-text">0x01 Double Symlinks</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x02-TOCTOU-time-of-check-time-of-use"><span class="toc-number">5.2.</span> <span class="toc-text">0x02 TOCTOU(time of check time of use)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#0x03-CHECK-CONTENT"><span class="toc-number">5.3.</span> <span class="toc-text">0x03 $CHECK_CONTENT</span></a></li></ol></li></ol>
+      </div>
+    
+
+    <div id="share-footer" style="display: none">
+      <ul>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.facebook.com/sharer.php?u=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/"><i class="fab fa-facebook fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://twitter.com/share?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&text=HTB-Linkvortex"><i class="fab fa-twitter fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.linkedin.com/shareArticle?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&title=HTB-Linkvortex"><i class="fab fa-linkedin fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://pinterest.com/pin/create/bookmarklet/?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&is_video=false&description=HTB-Linkvortex"><i class="fab fa-pinterest fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" href="mailto:?subject=HTB-Linkvortex&body=Check out this article: https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/"><i class="fa-solid fa-envelope fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://getpocket.com/save?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&title=HTB-Linkvortex"><i class="fab fa-get-pocket fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://reddit.com/submit?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&title=HTB-Linkvortex"><i class="fab fa-reddit fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.stumbleupon.com/submit?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&title=HTB-Linkvortex"><i class="fab fa-stumbleupon fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://digg.com/submit?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&title=HTB-Linkvortex"><i class="fab fa-digg fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="http://www.tumblr.com/share/link?url=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&name=HTB-Linkvortex&description="><i class="fab fa-tumblr fa-lg" aria-hidden="true"></i></a></li>
+  <li><a class="icon" target="_blank" rel="noopener" href="https://news.ycombinator.com/submitlink?u=https://thr2on1.github.io/2025/04/23/HTB-Linkvortex/&t=HTB-Linkvortex"><i class="fab fa-hacker-news fa-lg" aria-hidden="true"></i></a></li>
+</ul>
+
+    </div>
+
+    <div id="actions-footer">
+        <a id="menu" class="icon" href="#" onclick="$('#nav-footer').toggle();return false;"><i class="fa-solid fa-bars fa-lg" aria-hidden="true"></i> Menu</a>
+        
+          <a id="toc" class="icon" href="#" onclick="$('#toc-footer').toggle();return false;"><i class="fa-solid fa-list fa-lg" aria-hidden="true"></i> TOC</a>
+        
+        <a id="share" class="icon" href="#" onclick="$('#share-footer').toggle();return false;"><i class="fa-solid fa-share-alt fa-lg" aria-hidden="true"></i> Share</a>
+        <a id="top" style="display:none" class="icon" href="#" onclick="$('html, body').animate({ scrollTop: 0 }, 'fast');"><i class="fa-solid fa-chevron-up fa-lg" aria-hidden="true"></i> Top</a>
+    </div>
+
+  </div>
+</div>
+
+        
+        <footer id="footer">
+  <div class="footer-left">
+    Copyright &copy;
+    
+    
+    2025-2026
+    Thr2on1
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+        <!--
+       --><li><a href="/">Home</a></li><!--
+     --><!--
+       --><li><a href="/archives/">Writing</a></li><!--
+     --><!--
+       --><li><a href="/categories/">Category</a></li><!--
+     --><!--
+       --><li><a href="/tags/">tags</a></li><!--
+     --><!--
+       --><li><a href="/about/">About</a></li><!--
+     --><!--
+       --><li><a href="/search/">Search</a></li><!--
+     -->
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+    </div>
+    <!-- styles -->
+
+
+
+  <link rel="preload" as="style" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" crossorigin="anonymous" onload="this.onload=null;this.rel='stylesheet'"/>
+
+
+    <!-- jquery -->
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" crossorigin="anonymous"></script>
+
+
+
+
+<!-- clipboard -->
+
+  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.7/clipboard.min.js" crossorigin="anonymous"></script>
+  
+  <script type="text/javascript">
+  $(function() {
+    // copy-btn HTML
+    var btn = "<span class=\"btn-copy tooltipped tooltipped-sw\" aria-label=\"Copy to clipboard!\">";
+    btn += '<i class="fa-regular fa-clone"></i>';
+    btn += '</span>';
+    // mount it!
+    $(".highlight table").before(btn);
+    var clip = new ClipboardJS('.btn-copy', {
+      text: function(trigger) {
+        return Array.from(trigger.nextElementSibling.querySelectorAll('.code')).reduce((str,it)=>str+it.innerText+'\n','')
+      }
+    });
+    clip.on('success', function(e) {
+      e.trigger.setAttribute('aria-label', "Copied!");
+      e.clearSelection();
+    })
+  })
+  </script>
+
+
+<script src="/js/main.js"></script>
+
+<!-- search -->
+
+<!-- Baidu Analytics -->
+
+<!-- Cloudflare Analytics -->
+
+<!-- Disqus Comments -->
+
+<!-- utterances Comments -->
+
+</body>
+</html>
